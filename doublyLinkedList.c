@@ -70,6 +70,28 @@ node *insertatith(node *head,int data,int i){
   }
   return head;
 }
+    node *deleteAtith(node *head,int i)
+{
+  node *p=head;
+  if(i==1){
+    head=head->next;
+    head->prev=NULL;
+    free(p);
+  }
+  else{
+    for(int j=1;j<i-1;j++)
+      {
+        p=p->next;
+        
+      }
+    node *q=p->next;
+    p->next=q->next;
+    q->next->prev=p;
+    free(q);
+  }
+  return head;
+
+}
 int main() {
     node *head;
     head=takeinput(5); 
