@@ -1,0 +1,177 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define the node structure
+typedef struct node {
+    int data;
+    struct node *next;
+} node;
+
+// Function to take input and create the linked list
+node* takein(int n) {
+    node *head = NULL, *temp, *p;
+    int i;
+
+    for (i = 0; i < n; i++) {
+        temp = (node*)malloc(sizeof(node));
+        printf("Enter element %d of list: ", i + 1);
+        scanf("%d", &temp->data);
+        temp->next = NULL;
+        
+        if (head == NULL) {
+            head = temp;
+        } else {
+            p = head;
+            while (p->next != NULL) {
+                p = p->next;
+            }
+            p->next = temp;
+        }
+    }
+    return head;
+}
+
+// Function to print the linked list
+void print(node *head) {
+    node* temp = head;
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+// Function to reverse the linked list
+node* reverse(node* head) {
+    node *curr = head;
+    node *prev = NULL;
+    node *next;
+
+    while (curr != NULL) {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    head = prev;
+    return head;
+}
+
+// Function to print the sum of elements in the linked list
+void printsum(node *head) {
+    node* temp = head;
+    int sum = 0;
+    while (temp != NULL) {
+        sum += temp->data;
+        temp = temp->next;
+    }
+    printf("Sum of elements: %d\n", sum);
+}
+
+// Function to insert a node at the head
+node* insertathead(node *head, int data) {
+    node *temp = (node*)malloc(sizeof(node));
+    temp->data = data;
+    temp->next = head;
+    head = temp;
+    return head;
+}
+
+// Function to delete a node with specific data
+node* deletenode(node *head, int data) {
+    node *temp = head;
+    node *prev = NULL;
+
+    while (temp != NULL) {
+        if (temp->data == data) {
+            if (prev == NULL) { // Deleting the head node
+                head = temp->next;
+            } else { // Deleting a node other than head
+                prev->next = temp->next;
+            }
+            free(temp);
+            return head; // Exit function after deletion
+        }
+        prev = temp;
+        temp = temp->next;
+    }
+    printf("Element %d not found in the list.\n", data);
+    return head;
+}
+node *deleteithnode(node *head, int i) {
+    if (head == NULL || i < 1) {
+        return head; // invalid case
+    }
+
+    node *temp = head;
+    node *prev = NULL;
+    int j = 1;
+
+    // Traverse to the ith node
+    while (temp != NULL && j < i) {
+        prev = temp;
+        temp = temp->next;
+        j++;
+    }
+
+    // If the i-th node was found
+    if (temp != NULL) {
+        if (prev == NULL) {
+            // Deleting the head node
+            head = temp->next;
+        } else {
+            // Deleting a middle or last node
+            prev->next = temp->next;
+        }
+        free(temp); 
+    }
+
+    return head; 
+}
+
+
+int main() {
+    int k,m,n,p;
+    node* head;
+
+    head = takein(3);
+    printf("Initial list: ");
+    print(head);
+
+    // Reverse the linked list
+    head = reverse(head);
+    printf("Reversed list: ");
+    print(head);
+
+    // Insert a new element at the head
+    printf("Enter data you want to insert at the head: ");
+    scanf("%d", &k);
+    head = insertathead(head, k);
+    printf("List after insertion: ");
+    print(head);
+
+    printf("1 for deleting by index and 2 by data 3 if you do not want to delete");
+    scanf("%d",&n);
+    if(n==1){
+        printf("enter data to be deleted");
+        scanf("%d",&p);
+    head = deletenode(head, p);
+    printf("List after deletion: ");
+    print(head);
+}
+else if(n==2){
+    // Print the sum of elements
+    printsum(head);
+    printf("enter the index to be deleted");
+    scanf("%d",&m);
+    head=deleteithnode(head,m);
+    print(head);
+}
+else{
+    printf("no node is deleted");
+}
+    
+
+
+    return 0;
+}
