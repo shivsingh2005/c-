@@ -1,0 +1,61 @@
+#include<stdio.h>
+
+int indexSequentialSearch(int a[], int n, int x) {
+    int low = 0;
+    int high = n - 1;
+
+    // Boundary check
+    if (x < a[low] || x > a[high]) {
+        return -1;
+    }
+
+    int step = 4; // Block size for index sequential search
+    int i = low;
+
+    // Jump in blocks
+    while (i <= high) {
+        if (a[i] == x) {
+            return i; // Found at block boundary
+        }
+        if (a[i] > x) {
+            // Perform linear search in the previous block
+            int li = i;
+            int fi = i - step + 1; // Start of the block
+            if (fi < low) fi = low; // Ensure we don't go below array bounds
+            for (int j = fi; j < li; j++) {
+                if (a[j] == x) {
+                    return j;
+                }
+            }
+            return -1; // Not found in the block
+        }
+        i += step; // Move to the next block
+    }
+
+    // Perform linear search in the remaining elements (if any)
+    int li = high;
+    int fi = i - step + 1;
+    if (fi < low) fi = low;
+    for (int j = fi; j <= li; j++) {
+        if (a[j] == x) {
+            return j;
+        }
+    }
+
+    return -1; // Not found
+}
+
+int main() {
+    int arr[] = {10, 20, 30, 40, 50, 60, 70, 80};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int x = 50;
+
+    int result = indexSequentialSearch(arr, n, x);
+    if (result != -1) {
+        printf("Element %d found at index %d\n", x, result);
+    } else {
+        printf("Element %d not found in the array\n", x);
+    }
+
+    return 0;
+}
